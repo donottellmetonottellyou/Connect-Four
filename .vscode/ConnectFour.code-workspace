@@ -1,0 +1,28 @@
+{
+  "folders": [
+    {
+      "name": "Rust",
+      "path": "../rust.project"
+    },
+    {
+      "name": "Godot",
+      "path": "../godot.project"
+    },
+    {
+      "name": "Export",
+      "path": "../export.project"
+    },
+    {
+      "name": "Root",
+      "path": ".."
+    }
+  ],
+  "settings": {
+    "terminal.integrated.cwd": "${workspaceFolder:Rust}",
+    "files.exclude": {
+      "**/rust.project": true,
+      "**/godot.project": true
+    },
+    "explorer.excludeGitIgnore": true
+  }
+}
