@@ -1,4 +1,4 @@
-# Tic-Tac-Toe
+# Connect-Four
 
 This is a Godot implementation of Connect Four, with the logic written in Rust,
 primarily for learning purposes.
