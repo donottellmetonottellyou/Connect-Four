@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://b8ouv5ah0cbc8"]
+[gd_scene load_steps=6 format=3 uid="uid://b8ouv5ah0cbc8"]
 
 [ext_resource type="Texture2D" uid="uid://t2b4y0jjy3eo" path="res://Assets/grid.png" id="1_4bkga"]
 [ext_resource type="Texture2D" uid="uid://ceqrkko1pm6ak" path="res://Assets/checkers.png" id="2_qwdtt"]
@@ -9,9 +9,19 @@ texture = ExtResource("1_4bkga")
 1:0/0 = 0
 0:1/0 = 0
 1:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+3:1/0 = 0
+2:1/0 = 0
+2:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_fyk2u"]
 sources/0 = SubResource("TileSetAtlasSource_g7x1i")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y4rs6"]
+size = Vector2(96, 8)
 
 [node name="Main" type="Node2D"]
 
@@ -20,69 +30,72 @@ tile_set = SubResource("TileSet_fyk2u")
 format = 2
 layer_0/name = "-1"
 layer_0/z_index = -1
-layer_0/tile_data = PackedInt32Array(0, 0, 1, 1, 0, 1, 2, 0, 1, 3, 0, 1, 4, 0, 1, 5, 0, 1, 6, 0, 1, 65536, 0, 1, 131072, 0, 1, 196608, 0, 1, 262144, 0, 1, 327680, 0, 1, 327681, 0, 1, 327682, 0, 1, 327683, 0, 1, 327684, 0, 1, 327685, 0, 1, 327686, 0, 1, 262150, 0, 1, 196614, 0, 1, 131078, 0, 1, 65542, 0, 1, 65541, 0, 1, 65540, 0, 1, 65539, 0, 1, 65538, 0, 1, 65537, 0, 1, 131073, 0, 1, 131074, 0, 1, 131075, 0, 1, 131076, 0, 1, 131077, 0, 1, 196613, 0, 1, 196612, 0, 1, 196611, 0, 1, 196610, 0, 1, 196609, 0, 1, 262145, 0, 1, 262146, 0, 1, 262147, 0, 1, 262148, 0, 1, 262149, 0, 1)
+layer_0/tile_data = PackedInt32Array(327681, 131072, 0, 327682, 131072, 0, 327683, 131072, 0, 327684, 131072, 0, 327685, 131072, 0, 327686, 131072, 0, 262150, 131072, 0, 196614, 131072, 0, 131078, 131072, 0, 65542, 131072, 0, 65541, 131072, 0, 65540, 131072, 0, 65539, 131072, 0, 65538, 131072, 0, 65537, 131072, 0, 131073, 131072, 0, 131074, 131072, 0, 131075, 131072, 0, 131076, 131072, 0, 131077, 131072, 0, 196613, 131072, 0, 196612, 131072, 0, 196611, 131072, 0, 196610, 131072, 0, 196609, 131072, 0, 262145, 131072, 0, 262146, 131072, 0, 262147, 131072, 0, 262148, 131072, 0, 262149, 131072, 0, 393217, 131072, 0, 393218, 131072, 0, 393219, 131072, 0, 393220, 131072, 0, 393221, 131072, 0, 393222, 131072, 0, 327687, 131072, 0, 393223, 131072, 0, 262151, 131072, 0, 196615, 131072, 0, 131079, 131072, 0, 65543, 131072, 0, 0, 131072, 0, 65536, 131072, 0, 131072, 131072, 0, 196608, 131072, 0, 262144, 131072, 0, 327680, 131072, 0, 393216, 131072, 0, 458752, 131072, 0, 458753, 65536, 2, 458754, 131072, 0, 458755, 65536, 1, 458756, 131072, 0, 458757, 131072, 2, 458758, 131072, 0, 458759, 196608, 2, 458760, 131072, 0, 393224, 131072, 0, 327688, 131072, 0, 262152, 131072, 0, 196616, 131072, 0, 131080, 131072, 0, 65544, 131072, 0, 8, 131072, 0, 7, 0, 2, 6, 0, 1, 5, 196608, 1, 4, 131072, 1, 3, 131072, 1, 2, 65536, 1, 1, 0, 1)
 layer_1/name = "+1"
 layer_1/z_index = 1
-layer_1/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 131072, 0, 0, 196608, 0, 0, 262144, 0, 0, 327680, 65536, 0, 327681, 0, 0, 262145, 65536, 0, 196609, 0, 0, 131073, 0, 0, 65537, 0, 0, 1, 0, 0, 2, 0, 0, 65538, 0, 0, 131074, 0, 0, 196610, 65536, 0, 262146, 0, 0, 327682, 0, 0, 327683, 0, 0, 262147, 0, 0, 196611, 0, 0, 131075, 65536, 0, 65539, 0, 0, 3, 0, 0, 4, 0, 0, 65540, 0, 0, 131076, 0, 0, 196612, 0, 0, 262148, 0, 0, 327684, 0, 0, 327685, 0, 0, 262149, 0, 0, 196613, 0, 0, 131077, 0, 0, 65541, 0, 0, 5, 0, 0, 6, 0, 0, 65542, 0, 0, 131078, 0, 0, 196614, 0, 0, 262150, 0, 0, 327686, 0, 0)
+layer_1/tile_data = PackedInt32Array(327681, 0, 0, 262145, 0, 0, 196609, 0, 0, 131073, 0, 0, 65537, 0, 0, 65538, 0, 0, 131074, 0, 0, 196610, 0, 0, 262146, 0, 0, 327682, 0, 0, 327683, 0, 0, 262147, 0, 0, 196611, 0, 0, 131075, 0, 0, 65539, 0, 0, 65540, 0, 0, 131076, 0, 0, 196612, 0, 0, 262148, 0, 0, 327684, 0, 0, 327685, 0, 0, 262149, 0, 0, 196613, 0, 0, 131077, 0, 0, 65541, 0, 0, 65542, 0, 0, 131078, 0, 0, 196614, 0, 0, 262150, 0, 0, 327686, 0, 0, 393217, 65536, 0, 393218, 65536, 0, 393219, 65536, 0, 393220, 65536, 0, 393221, 0, 0, 393222, 0, 0, 393223, 0, 0, 327687, 0, 0, 262151, 0, 0, 196615, 0, 0, 131079, 0, 0, 65543, 0, 0)
 
-[node name="CanvasGroup" type="CanvasGroup" parent="."]
-position = Vector2(8, 8)
+[node name="Slots" type="Area2D" parent="."]
+position = Vector2(24, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="CanvasGroup"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Slots"]
+position = Vector2(48, 4)
+shape = SubResource("RectangleShape2D_y4rs6")
+
+[node name="Grid" type="CanvasGroup" parent="."]
+position = Vector2(24, 24)
+
+[node name="Sprite2D" type="Sprite2D" parent="Grid"]
 position = Vector2(16, 80)
 texture = ExtResource("2_qwdtt")
 hframes = 2
 
-[node name="Sprite2D2" type="Sprite2D" parent="CanvasGroup"]
+[node name="Sprite2D2" type="Sprite2D" parent="Grid"]
 position = Vector2(32, 48)
 texture = ExtResource("2_qwdtt")
 hframes = 2
 frame = 1
 
-[node name="Sprite2D3" type="Sprite2D" parent="CanvasGroup"]
+[node name="Sprite2D3" type="Sprite2D" parent="Grid"]
 position = Vector2(0, 80)
 texture = ExtResource("2_qwdtt")
 hframes = 2
 frame = 1
 
-[node name="Sprite2D4" type="Sprite2D" parent="CanvasGroup"]
+[node name="Sprite2D4" type="Sprite2D" parent="Grid"]
 position = Vector2(48, 80)
 texture = ExtResource("2_qwdtt")
 hframes = 2
 
-[node name="Sprite2D5" type="Sprite2D" parent="CanvasGroup"]
+[node name="Sprite2D5" type="Sprite2D" parent="Grid"]
 position = Vector2(16, 64)
 texture = ExtResource("2_qwdtt")
 hframes = 2
 frame = 1
 
-[node name="Sprite2D6" type="Sprite2D" parent="CanvasGroup"]
+[node name="Sprite2D6" type="Sprite2D" parent="Grid"]
 position = Vector2(32, 64)
 texture = ExtResource("2_qwdtt")
 hframes = 2
 
-[node name="Sprite2D7" type="Sprite2D" parent="CanvasGroup"]
+[node name="Sprite2D7" type="Sprite2D" parent="Grid"]
 position = Vector2(32, 80)
 texture = ExtResource("2_qwdtt")
 hframes = 2
 
-[node name="Sprite2D8" type="Sprite2D" parent="CanvasGroup"]
+[node name="Sprite2D8" type="Sprite2D" parent="Grid"]
 position = Vector2(48, 64)
 texture = ExtResource("2_qwdtt")
 hframes = 2
 frame = 1
 
-[node name="Sprite2D9" type="Sprite2D" parent="CanvasGroup"]
-position = Vector2(48, 48)
+[node name="Sprite2D9" type="Sprite2D" parent="Grid"]
+position = Vector2(48, 40)
 texture = ExtResource("2_qwdtt")
 hframes = 2
-
-[node name="Sprite2D10" type="Sprite2D" parent="CanvasGroup"]
-position = Vector2(48, 24)
-texture = ExtResource("2_qwdtt")
-hframes = 2
-frame = 1
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(56, 48)
-zoom = Vector2(5, 5)
+position = Vector2(72, 64)
+zoom = Vector2(4, 4)
+
+[node name="Node2D" type="Node2D" parent="."]
