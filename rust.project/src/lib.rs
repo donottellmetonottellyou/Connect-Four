@@ -44,20 +44,7 @@ impl ICanvasGroup for ConnectFourGrid {
         let column = thread_rng().gen_range(0..7);
         let is_yellow = thread_rng().gen_bool(0.5);
 
-        match self.add_checker_to_column(column as usize, is_yellow) {
-            Ok(_) => godot_print!(
-                "Succeeded in adding to column {} with yellow {}",
-                column,
-                is_yellow
-            ),
-            Err(_) => godot_print!(
-                "Failed in adding to column {} with yellow {}: {}r/{}y",
-                column,
-                is_yellow,
-                self.red_checkers.len(),
-                self.yellow_checkers.len(),
-            ),
-        }
+        self.add_checker_to_column(column as usize, is_yellow).ok();
     }
 }
 impl ConnectFourGrid {
@@ -65,7 +52,7 @@ impl ConnectFourGrid {
     const GRID_CELL_SIZE: usize = 16;
 
     fn add_checker_to_column(&mut self, column: usize, is_yellow: bool) -> Result<(), ()> {
-        let checker = match (
+        let mut checker = match (
             is_yellow,
             self.yellow_checkers.len() - self.red_checkers.len(),
         ) {
@@ -86,13 +73,17 @@ impl ConnectFourGrid {
             }
         };
 
-        let mut checker_2d: Gd<Node2D> = checker.upcast();
-        checker_2d.set_position(Vector2 {
+        checker.set_position(Vector2 {
+            x: (column * Self::GRID_CELL_SIZE) as f32,
+            y: -(Self::GRID_CELL_SIZE as isize) as f32,
+        });
+
+        checker.bind_mut().target = Some(Vector2 {
             x: (column * Self::GRID_CELL_SIZE) as f32,
             y: (row * Self::GRID_CELL_SIZE) as f32,
         });
 
-        self.base_mut().add_child(checker_2d.upcast());
+        self.base_mut().add_child(checker.upcast());
 
         Ok(())
     }
@@ -121,6 +112,7 @@ impl ConnectFourGrid {
 #[class(base=Sprite2D, init)]
 struct ConnectFourChecker {
     is_yellow: bool,
+    target: Option<Vector2>,
 
     base: Base<Sprite2D>,
 }
@@ -136,6 +128,19 @@ impl ISprite2D for ConnectFourChecker {
             false => 0,
             true => 1,
         })
+    }
+
+    fn physics_process(&mut self, delta: f64) {
+        if let Some(target) = self.target {
+            let current_position = self.base().get_position();
+            let movement =
+                current_position.direction_to(target).normalized_or_zero() * delta as f32 * 256.0;
+            self.base_mut().set_position(current_position + movement);
+            if (target - self.base().get_position()).length() < 4.0 {
+                self.base_mut().set_position(target);
+                self.target = None;
+            }
+        }
     }
 }
 impl ConnectFourChecker {
