@@ -75,7 +75,16 @@ impl ConnectFourGrid {
         }
         .ok_or(())?;
 
-        let row = self.put_in_column(column, checker.clone())?;
+        let row = match self.put_in_column(column, checker.clone()) {
+            Ok(row) => row,
+            Err(_) => {
+                match is_yellow {
+                    false => self.red_checkers.push(checker),
+                    true => self.yellow_checkers.push(checker),
+                };
+                return Err(());
+            }
+        };
 
         let mut checker_2d: Gd<Node2D> = checker.upcast();
         checker_2d.set_position(Vector2 {
