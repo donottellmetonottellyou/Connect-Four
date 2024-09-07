@@ -1,3 +1,5 @@
+use super::game_control::ConnectFourGame;
+
 use godot::{
     engine::{HBoxContainer, IHBoxContainer, ITextureButton, TextureButton},
     prelude::*,
@@ -11,7 +13,6 @@ pub struct ConnectFourUserInterface {
 #[godot_api]
 impl IHBoxContainer for ConnectFourUserInterface {
     fn ready(&mut self) {
-        self.base_mut().set_position(Vector2 { x: 16.0, y: 16.0 });
         self.base_mut()
             .add_theme_constant_override("separation".into(), 0);
 
@@ -24,8 +25,9 @@ impl IHBoxContainer for ConnectFourUserInterface {
 }
 #[godot_api]
 impl ConnectFourUserInterface {
-    fn select_column(&mut self, column: usize) {
-        godot_print!("Column {} selected", column);
+    fn select_column(&self, column: usize) {
+        let mut game_control: Gd<ConnectFourGame> = self.base().get_parent().unwrap().cast();
+        game_control.bind_mut().play_column(column);
     }
 }
 
@@ -49,8 +51,8 @@ impl ITextureButton for ConnectFourColumnButton {
 #[godot_api]
 impl ConnectFourColumnButton {
     #[func]
-    fn on_pressed(&mut self) {
-        let mut parent: Gd<ConnectFourUserInterface> = self.base().get_parent().unwrap().cast();
-        parent.bind_mut().select_column(self.column);
+    fn on_pressed(&self) {
+        let parent: Gd<ConnectFourUserInterface> = self.base().get_parent().unwrap().cast();
+        parent.bind().select_column(self.column);
     }
 }

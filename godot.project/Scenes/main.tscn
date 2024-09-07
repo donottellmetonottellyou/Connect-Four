@@ -35,7 +35,5 @@ layer_1/tile_data = PackedInt32Array(327681, 0, 0, 262145, 0, 0, 196609, 0, 0, 1
 position = Vector2(72, 64)
 zoom = Vector2(4, 4)
 
-[node name="ConnectFourGrid" type="ConnectFourGrid" parent="."]
-position = Vector2(24, 24)
-
-[node name="ConnectFourUserInterface" type="ConnectFourUserInterface" parent="."]
+[node name="ConnectFourGame" type="ConnectFourGame" parent="."]
+position = Vector2(16, 16)

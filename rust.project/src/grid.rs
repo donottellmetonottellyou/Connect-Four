@@ -34,19 +34,25 @@ impl ICanvasGroup for ConnectFourGrid {
             base,
         }
     }
+
+    fn ready(&mut self) {
+        self.base_mut().set_position(Vector2 { x: 8.0, y: 8.0 });
+    }
 }
 impl ConnectFourGrid {
     const PLAYER_CHECKER_NUMBER: usize = 21;
     const GRID_CELL_SIZE: usize = 16;
 
-    fn add_checker_to_column(&mut self, column: usize, is_yellow: bool) -> Result<(), ()> {
-        let mut checker = match (
-            is_yellow,
-            self.yellow_checkers.len() - self.red_checkers.len(),
-        ) {
-            (false, 0) => self.red_checkers.pop(),
-            (true, 1) => self.yellow_checkers.pop(),
-            _ => None,
+    pub fn add_checker_to_column(&mut self, column: usize) -> Result<(), ()> {
+        let is_yellow = match self.yellow_checkers.len() - self.red_checkers.len() {
+            0 => Ok(false),
+            1 => Ok(true),
+            _ => Err(()),
+        }?;
+
+        let mut checker = match is_yellow {
+            false => self.red_checkers.pop(),
+            true => self.yellow_checkers.pop(),
         }
         .ok_or(())?;
 
@@ -129,11 +135,5 @@ impl ISprite2D for ConnectFourChecker {
                 self.target = None;
             }
         }
-    }
-}
-impl ConnectFourChecker {
-    #[inline]
-    fn is_yellow(&self) -> bool {
-        self.is_yellow
     }
 }
