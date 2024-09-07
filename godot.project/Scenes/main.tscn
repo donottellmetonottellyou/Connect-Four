@@ -37,3 +37,5 @@ zoom = Vector2(4, 4)
 
 [node name="ConnectFourGrid" type="ConnectFourGrid" parent="."]
 position = Vector2(24, 24)
+
+[node name="ConnectFourUserInterface" type="ConnectFourUserInterface" parent="."]
