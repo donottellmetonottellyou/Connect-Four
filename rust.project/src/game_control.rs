@@ -1,4 +1,4 @@
-use super::{grid::ConnectFourGrid, ui::ConnectFourUserInterface};
+use super::{checkers::ConnectFourGrid, ui::ConnectFourUserInterface};
 
 use godot::prelude::*;
 

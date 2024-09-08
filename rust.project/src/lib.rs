@@ -1,5 +1,5 @@
+mod checkers;
 mod game_control;
-mod grid;
 mod ui;
 
 use godot::prelude::*;
