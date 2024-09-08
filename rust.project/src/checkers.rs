@@ -5,22 +5,22 @@ use godot::{
 
 #[derive(GodotClass)]
 #[class(base=CanvasGroup)]
-pub struct ConnectFourGrid {
-    red_checkers: Vec<Gd<ConnectFourChecker>>,
-    yellow_checkers: Vec<Gd<ConnectFourChecker>>,
-    grid: [[Option<Gd<ConnectFourChecker>>; 7]; 6],
+pub struct ExtGrid {
+    red_checkers: Vec<Gd<ExtChecker>>,
+    yellow_checkers: Vec<Gd<ExtChecker>>,
+    grid: [[Option<Gd<ExtChecker>>; 7]; 6],
 
     base: Base<CanvasGroup>,
 }
 #[godot_api]
-impl ICanvasGroup for ConnectFourGrid {
+impl ICanvasGroup for ExtGrid {
     fn init(base: Base<Self::Base>) -> Self {
         let mut red_checkers = Vec::with_capacity(Self::PLAYER_CHECKER_NUMBER);
         let mut yellow_checkers = Vec::with_capacity(Self::PLAYER_CHECKER_NUMBER);
         for _ in 0..Self::PLAYER_CHECKER_NUMBER {
-            red_checkers.push(ConnectFourChecker::new_alloc());
+            red_checkers.push(ExtChecker::new_alloc());
             yellow_checkers.push({
-                let mut yellow_checker = ConnectFourChecker::new_alloc();
+                let mut yellow_checker = ExtChecker::new_alloc();
                 yellow_checker.bind_mut().is_yellow = true;
                 yellow_checker
             });
@@ -39,7 +39,7 @@ impl ICanvasGroup for ConnectFourGrid {
         self.base_mut().set_position(Vector2 { x: 8.0, y: 8.0 });
     }
 }
-impl ConnectFourGrid {
+impl ExtGrid {
     const PLAYER_CHECKER_NUMBER: usize = 21;
     const GRID_CELL_SIZE: usize = 16;
 
@@ -83,11 +83,7 @@ impl ConnectFourGrid {
     }
 
     #[inline]
-    fn put_in_column(
-        &mut self,
-        column: usize,
-        checker: Gd<ConnectFourChecker>,
-    ) -> Result<usize, ()> {
+    fn put_in_column(&mut self, column: usize, checker: Gd<ExtChecker>) -> Result<usize, ()> {
         for (i, row) in self.grid.iter_mut().enumerate().rev() {
             match row.get_mut(column).ok_or(())? {
                 Some(_) => (),
@@ -104,14 +100,14 @@ impl ConnectFourGrid {
 
 #[derive(GodotClass)]
 #[class(base=Sprite2D, init)]
-struct ConnectFourChecker {
+struct ExtChecker {
     is_yellow: bool,
     target: Option<Vector2>,
 
     base: Base<Sprite2D>,
 }
 #[godot_api]
-impl ISprite2D for ConnectFourChecker {
+impl ISprite2D for ExtChecker {
     fn ready(&mut self) {
         let is_yellow = self.is_yellow;
         let mut base = self.base_mut();
