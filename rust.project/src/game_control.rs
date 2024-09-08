@@ -1,11 +1,11 @@
-use super::{checkers::ExtGrid, ui::ExtUserInterface};
+use super::{checkers::ExtCheckers, ui::ExtUserInterface};
 
 use godot::prelude::*;
 
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 pub struct ExtGame {
-    grid: Gd<ExtGrid>,
+    grid: Gd<ExtCheckers>,
     ui: Gd<ExtUserInterface>,
 
     base: Base<Node2D>,
@@ -13,7 +13,7 @@ pub struct ExtGame {
 #[godot_api]
 impl INode2D for ExtGame {
     fn init(base: Base<Self::Base>) -> Self {
-        let grid = ExtGrid::new_alloc();
+        let grid = ExtCheckers::new_alloc();
         let ui = ExtUserInterface::new_alloc();
 
         Self { grid, ui, base }

@@ -5,7 +5,7 @@ use godot::{
 
 #[derive(GodotClass)]
 #[class(base=CanvasGroup)]
-pub struct ExtGrid {
+pub struct ExtCheckers {
     red_checkers: Vec<Gd<ExtChecker>>,
     yellow_checkers: Vec<Gd<ExtChecker>>,
     grid: [[Option<Gd<ExtChecker>>; 7]; 6],
@@ -13,7 +13,7 @@ pub struct ExtGrid {
     base: Base<CanvasGroup>,
 }
 #[godot_api]
-impl ICanvasGroup for ExtGrid {
+impl ICanvasGroup for ExtCheckers {
     fn init(base: Base<Self::Base>) -> Self {
         let mut red_checkers = Vec::with_capacity(Self::PLAYER_CHECKER_NUMBER);
         let mut yellow_checkers = Vec::with_capacity(Self::PLAYER_CHECKER_NUMBER);
@@ -39,7 +39,7 @@ impl ICanvasGroup for ExtGrid {
         self.base_mut().set_position(Vector2 { x: 8.0, y: 8.0 });
     }
 }
-impl ExtGrid {
+impl ExtCheckers {
     const PLAYER_CHECKER_NUMBER: usize = 21;
     const GRID_CELL_SIZE: usize = 16;
 
