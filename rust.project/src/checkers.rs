@@ -39,9 +39,15 @@ impl ICanvasGroup for ExtCheckers {
         self.base_mut().set_position(Vector2 { x: 8.0, y: 8.0 });
     }
 }
+#[godot_api]
 impl ExtCheckers {
     const PLAYER_CHECKER_NUMBER: usize = 21;
     const GRID_CELL_SIZE: usize = 16;
+
+    #[inline]
+    pub fn is_full(&self) -> bool {
+        self.yellow_checkers.is_empty()
+    }
 
     pub fn add_checker_to_column(&mut self, column: usize) -> Result<(), ()> {
         let is_yellow = match self.yellow_checkers.len() - self.red_checkers.len() {
@@ -95,6 +101,25 @@ impl ExtCheckers {
         }
 
         Err(())
+    }
+
+    pub fn drop_all_checkers(&mut self) {
+        for checker in self.grid.iter_mut().flat_map(|row| row.iter_mut()) {
+            if let Some(checker) = checker.take() {
+                let is_yellow = checker.bind().is_yellow;
+
+                match is_yellow {
+                    false => self.red_checkers.push(checker),
+                    true => self.yellow_checkers.push(checker),
+                }
+            }
+        }
+
+        let children = self.base().get_children();
+
+        for child in children.iter_shared() {
+            self.base_mut().remove_child(child);
+        }
     }
 }
 

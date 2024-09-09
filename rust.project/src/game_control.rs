@@ -30,6 +30,11 @@ impl INode2D for ExtGame {
 #[godot_api]
 impl ExtGame {
     pub fn play_column(&mut self, column: usize) {
+        if self.grid.bind().is_full() {
+            self.grid.bind_mut().drop_all_checkers();
+            return;
+        }
+
         self.grid.bind_mut().add_checker_to_column(column).ok();
     }
 }
