@@ -5,6 +5,8 @@ use godot::prelude::*;
 #[derive(GodotClass)]
 #[class(base=Node2D)]
 pub struct ExtGame {
+    is_finished: bool,
+
     checkers: Gd<ExtCheckers>,
     ui: Gd<ExtUserInterface>,
 
@@ -13,10 +15,17 @@ pub struct ExtGame {
 #[godot_api]
 impl INode2D for ExtGame {
     fn init(base: Base<Self::Base>) -> Self {
+        let is_finished = false;
+
         let checkers = ExtCheckers::new_alloc();
         let ui = ExtUserInterface::new_alloc();
 
-        Self { checkers, ui, base }
+        Self {
+            is_finished,
+            checkers,
+            ui,
+            base,
+        }
     }
 
     fn ready(&mut self) {
@@ -31,10 +40,28 @@ impl INode2D for ExtGame {
 impl ExtGame {
     pub fn play_column(&mut self, column: usize) {
         if self.checkers.bind().is_full() {
-            self.checkers.bind_mut().drop_all_checkers();
+            self.restart_game();
             return;
         }
 
-        self.checkers.bind_mut().add_checker_to_column(column).ok();
+        if self.is_finished {
+            self.restart_game();
+            return;
+        }
+
+        let played = self.checkers.bind_mut().add_checker_to_column(column);
+        if let Ok(played) = played {
+            self.is_finished = self
+                .checkers
+                .bind()
+                .find_connected_fours(played.0, played.1)
+                .is_some()
+        };
+    }
+
+    #[inline]
+    fn restart_game(&mut self) {
+        self.checkers.bind_mut().drop_all_checkers();
+        self.is_finished = false;
     }
 }

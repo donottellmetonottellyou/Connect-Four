@@ -3,6 +3,8 @@ use godot::{
     prelude::*,
 };
 
+use std::collections::HashSet;
+
 #[derive(GodotClass)]
 #[class(base=CanvasGroup)]
 pub struct ExtCheckers {
@@ -49,7 +51,7 @@ impl ExtCheckers {
         self.yellow_checkers.is_empty()
     }
 
-    pub fn add_checker_to_column(&mut self, column: usize) -> Result<(), ()> {
+    pub fn add_checker_to_column(&mut self, column: usize) -> Result<(usize, usize), ()> {
         let is_yellow = match self.yellow_checkers.len() - self.red_checkers.len() {
             0 => Ok(false),
             1 => Ok(true),
@@ -85,7 +87,7 @@ impl ExtCheckers {
 
         self.base_mut().add_child(checker.upcast());
 
-        Ok(())
+        Ok((row, column))
     }
 
     #[inline]
@@ -101,6 +103,132 @@ impl ExtCheckers {
         }
 
         Err(())
+    }
+
+    pub fn find_connected_fours(
+        &self,
+        row: usize,
+        column: usize,
+    ) -> Option<HashSet<(usize, usize)>> {
+        let mut connected_fours = HashSet::new();
+
+        let mut offsets = [-3, -2, -1, 0, 1, 2, 3]
+            .windows(4)
+            .map(|row| [row[0], row[1], row[2], row[3]]);
+        let offsets: [[isize; 4]; 4] = std::array::from_fn(|_| offsets.next().unwrap());
+
+        let connected_fours_check =
+            |accumulator: (bool, Option<Gd<ExtChecker>>), checker: Option<Gd<ExtChecker>>| {
+                if !accumulator.0 {
+                    return (false, None);
+                }
+
+                let checker = match checker {
+                    Some(checker) => checker,
+                    None => return (false, None),
+                };
+
+                let previous_checker = match accumulator.1 {
+                    Some(previous_checker) => previous_checker,
+                    None => return (true, Some(checker)),
+                };
+
+                if checker.bind().is_yellow != previous_checker.bind().is_yellow {
+                    return (false, None);
+                }
+
+                (true, Some(checker))
+            };
+
+        let mut four = Vec::with_capacity(4);
+
+        for column_offsets in offsets.iter() {
+            four.clear();
+            four.extend(column_offsets.iter().filter_map(|offset| {
+                self.grid[row].get(usize::try_from(column as isize + offset).ok()?)
+            }));
+
+            if four.len() != 4 {
+                continue;
+            }
+
+            if four
+                .iter()
+                .copied()
+                .cloned()
+                .fold((true, None), connected_fours_check)
+                .0
+            {
+                connected_fours.extend(
+                    column_offsets
+                        .iter()
+                        .map(|offset| (row, (column as isize + offset) as usize)),
+                );
+            }
+        }
+
+        for row_offsets in offsets.iter() {
+            four.clear();
+            four.extend(row_offsets.iter().filter_map(|offset| {
+                self.grid
+                    .get(usize::try_from(row as isize + offset).ok()?)
+                    .map(|row| &row[column])
+            }));
+
+            if four.len() != 4 {
+                continue;
+            }
+
+            if four
+                .iter()
+                .copied()
+                .cloned()
+                .fold((true, None), connected_fours_check)
+                .0
+            {
+                connected_fours.extend(
+                    row_offsets
+                        .iter()
+                        .map(|offset| ((row as isize + offset) as usize, column)),
+                )
+            }
+        }
+
+        for diagonal_flip in [-1, 1] {
+            for diagonal_offsets in offsets.iter() {
+                four.clear();
+                four.extend(diagonal_offsets.iter().filter_map(|offset| {
+                    self.grid
+                        .get(usize::try_from(row as isize + offset * diagonal_flip).ok()?)?
+                        .get(usize::try_from(column as isize + offset).ok()?)
+                }));
+
+                if four.len() != 4 {
+                    continue;
+                }
+
+                if four
+                    .iter()
+                    .copied()
+                    .cloned()
+                    .fold((true, None), connected_fours_check)
+                    .0
+                {
+                    connected_fours.extend(diagonal_offsets.iter().map(|offset| {
+                        (
+                            (row as isize + offset * diagonal_flip) as usize,
+                            (column as isize + offset) as usize,
+                        )
+                    }))
+                }
+            }
+        }
+
+        if connected_fours.is_empty() {
+            return None;
+        }
+
+        Some(connected_fours)
     }
 
     pub fn drop_all_checkers(&mut self) {
