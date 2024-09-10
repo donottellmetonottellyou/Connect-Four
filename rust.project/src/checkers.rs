@@ -112,10 +112,8 @@ impl ExtCheckers {
     ) -> Option<HashSet<(usize, usize)>> {
         let mut connected_fours = HashSet::new();
 
-        let mut offsets = [-3, -2, -1, 0, 1, 2, 3]
-            .windows(4)
-            .map(|row| [row[0], row[1], row[2], row[3]]);
-        let offsets: [[isize; 4]; 4] = std::array::from_fn(|_| offsets.next().unwrap());
+        static OFFSETS: [[isize; 4]; 4] =
+            [[-3, -2, -1, 0], [-2, -1, 0, 1], [-1, 0, 1, 2], [0, 1, 2, 3]];
 
         let connected_fours_check =
             |accumulator: (bool, Option<Gd<ExtChecker>>), checker: Option<Gd<ExtChecker>>| {
@@ -142,7 +140,7 @@ impl ExtCheckers {
 
         let mut four = Vec::with_capacity(4);
 
-        for column_offsets in offsets.iter() {
+        for column_offsets in OFFSETS {
             four.clear();
             four.extend(column_offsets.iter().filter_map(|offset| {
                 self.grid[row].get(usize::try_from(column as isize + offset).ok()?)
@@ -167,7 +165,7 @@ impl ExtCheckers {
             }
         }
 
-        for row_offsets in offsets.iter() {
+        for row_offsets in OFFSETS {
             four.clear();
             four.extend(row_offsets.iter().filter_map(|offset| {
                 self.grid
@@ -195,7 +193,7 @@ impl ExtCheckers {
         }
 
         for diagonal_flip in [-1, 1] {
-            for diagonal_offsets in offsets.iter() {
+            for diagonal_offsets in OFFSETS {
                 four.clear();
                 four.extend(diagonal_offsets.iter().filter_map(|offset| {
                     self.grid
