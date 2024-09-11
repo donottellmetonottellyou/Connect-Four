@@ -248,6 +248,19 @@ impl ExtCheckers {
         }
     }
 }
+impl Drop for ExtCheckers {
+    fn drop(&mut self) {
+        self.drop_all_checkers();
+
+        for checker in self
+            .red_checkers
+            .drain(..)
+            .chain(self.yellow_checkers.drain(..))
+        {
+            checker.free();
+        }
+    }
+}
 
 #[derive(GodotClass)]
 #[class(base=Sprite2D, init)]
