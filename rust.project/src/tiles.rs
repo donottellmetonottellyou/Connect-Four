@@ -1,10 +1,10 @@
-use std::collections::HashSet;
-
 use godot::{
     engine::{ITileMap, TileMap},
     obj::WithBaseField,
     prelude::*,
 };
+
+use std::collections::HashSet;
 
 #[derive(GodotClass)]
 #[class(base=TileMap)]
