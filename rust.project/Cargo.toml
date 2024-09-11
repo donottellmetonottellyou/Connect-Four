@@ -9,4 +9,3 @@ crate-type = ["cdylib"]
 
 [dependencies]
 godot = { version = "0.1.3", features = ["api-4-2"] }
-rand = "0.8.5"
