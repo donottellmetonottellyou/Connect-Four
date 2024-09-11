@@ -250,8 +250,6 @@ impl ExtCheckers {
 }
 impl Drop for ExtCheckers {
     fn drop(&mut self) {
-        self.drop_all_checkers();
-
         for checker in self
             .red_checkers
             .drain(..)
