@@ -274,7 +274,7 @@ impl ISprite2D for ExtChecker {
         let is_yellow = self.is_yellow;
         let mut base = self.base_mut();
 
-        base.set_texture(load("res://Assets/checkers.png"));
+        base.set_texture(load("res://assets/checkers.png"));
         base.set_hframes(2);
         base.set_frame(match is_yellow {
             false => 0,
