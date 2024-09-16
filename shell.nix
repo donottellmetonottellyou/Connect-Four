@@ -1,6 +1,8 @@
 # Helped by https://github.com/jraygauthier/jrg-rust-cross-experiment
 { pkgs ? import <nixpkgs> { } }:
 let
+  cwd = builtins.toString ./.;
+
   rustToolchain = "stable";
   rustTargetWin = "x86_64-pc-windows-gnu";
 
@@ -24,11 +26,26 @@ pkgs.mkShell {
 
     wine
 
-    (pkgs.writeShellScriptBin "cargo-build-all" ''
-      cargo build --release && cargo build --release --target=${rustTargetWin}
+    (pkgs.writeShellScriptBin "open-editor" ''
+      cd ${cwd}/godot
+      nohup godot4 -e --path . > /dev/null &
     '')
-    (pkgs.writeShellScriptBin "cargo-test-all" ''
+    (pkgs.writeShellScriptBin "build-dev" ''
+      cd ${cwd}/rust
+      # Clean release for export sanity
+      cargo clean --profile release
+      cargo build && cargo build --target=${rustTargetWin}
+    '')
+    (pkgs.writeShellScriptBin "build-test" ''
+      cd ${cwd}/rust
+      # Clean release for export sanity
+      cargo clean --profile release
       cargo test && cargo test --target=${rustTargetWin}
+    '')
+    (pkgs.writeShellScriptBin "build-release" ''
+      cd ${cwd}/rust
+      # Run cargo test instead of build for sanity check
+      cargo test --release && cargo test --release --target=${rustTargetWin}
     '')
   ];
 
@@ -46,6 +63,7 @@ pkgs.mkShell {
     rustup target add "${rustTargetWin}" > /dev/null
     rustup show
     echo "godot $(godot4 --version)"
-    echo "run cargo-build-all for releases, cargo-test-all for testing"
+    echo
+    echo "Commands: open-editor, build-dev, build-test, build-release"
   '';
 }
