@@ -1,5 +1,7 @@
 # Connect-Four
 
+![Screenshot](./screenshots/game-1.png)
+
 This is a Godot implementation of Connect Four, with the logic written in Rust,
 primarily for learning purposes.
 
